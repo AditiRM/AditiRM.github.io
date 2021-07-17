@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unorthodox</title>
+    <link>/</link>
+    <description>Recent content on Unorthodox</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>नमस्ते राही ! This is Aditi and you have reached my small place on the World Wide Web. 😄 🕶
+I’m a final year Computer Engineering undergraduate at College of Engineering, Pune.🇮🇳I&amp;rsquo;m passionate about programming and computer systems design and domain specific languages. I like to think of myself as a problem solver who prefers to leverage the potential of technology to build a better, efficient and robust solutions.
+In my college, I&amp;rsquo;m a core team member of Asscociation of Students of Computer and IT [ASCI].</description>
+    </item>
+    
+  </channel>
+</rss>
