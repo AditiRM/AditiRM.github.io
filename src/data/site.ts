@@ -8,6 +8,7 @@ export const site = {
   intro: "A compiler engineer's work, notes, meals and travels, collected in one place.",
   openToWork: true,
   city: 'Bengaluru',
+  country: 'India',
   links: {
     linkedin: 'https://www.linkedin.com/in/aditi-medhane-92b531191/',
     github: 'https://github.com/AditiRM',
