@@ -40,20 +40,27 @@ const { fresh } = await galleryStats();
     display: grid;
     grid-template-columns: minmax(0, .85fr) minmax(0, 1.6fr);
     gap: clamp(28px, 5vw, 80px);
-    padding: clamp(28px, 5vw, 64px) var(--gutter) clamp(28px, 3.5vw, 48px);
+    align-items: center;
+    padding: clamp(18px, 3.5vh, 44px) var(--gutter);
   }
-  .hleft { display: flex; flex-direction: column; gap: 28px; }
-  .titles { display: flex; flex-direction: column; gap: 14px; }
-  .htitle { font: 300 clamp(2.3rem, 4.8vw, 4rem)/.98 var(--serif); letter-spacing: -.03em; }
+  .hleft { display: flex; flex-direction: column; gap: clamp(16px, 3.4vh, 28px); }
+  .titles { display: flex; flex-direction: column; gap: 12px; }
+  /* sizes follow both the window width and its height, so the page fits one screen */
+  .htitle { font: 300 clamp(2.1rem, min(4.8vw, 8.2vh), 4.6rem)/.98 var(--serif); letter-spacing: -.03em; }
   .htitle i { font-weight: 300; }
   .hsub { font: 500 .74rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
   .hintro { font: 400 1.06rem/1.5 var(--serif); color: var(--ink2); max-width: 30ch; }
   /* "Open to work." sits on its own line under the intro */
   .hintro :global(.open-to-work) { display: block; margin-top: .35em; }
-  .curator { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; margin: 0; }
+  .curator { display: flex; flex-direction: row; gap: 14px; align-items: flex-end; margin: 0; }
   /* the photo at its own 3:4 shape, no zoom, with a thin mat */
-  .curator .ph { width: 150px; aspect-ratio: 3 / 4; flex: none; padding: 5px; border: 1px solid var(--hair); }
+  .curator .ph { width: clamp(84px, 15vh, 180px); aspect-ratio: 3 / 4; flex: none; padding: 5px; border: 1px solid var(--hair); }
   .curator :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .hright { display: flex; flex-direction: column; gap: 52px; min-width: 0; }
-  @media (max-width: 880px) { .home { grid-template-columns: 1fr; } }
+  .hright { display: flex; flex-direction: column; gap: clamp(20px, 6vh, 64px); min-width: 0; }
+  .hright :global(.rblock h2) { font-size: clamp(1.7rem, min(4.4vw, 7.6vh), 4rem); }
+  .hright :global(.rblock .wings) { margin: 8px 0 12px; }
+  .hright :global(.route .wl) { font-size: clamp(.74rem, 1.55vh, .9rem); line-height: 1.35; }
+  .hright :global(.rblock .tagline) { font-size: clamp(1.02rem, 2vh, 1.25rem); }
+  .hright :global(.route .wl b) { font-size: clamp(.88rem, 1.8vh, 1.05rem); }
+  @media (max-width: 880px) { .home { grid-template-columns: 1fr; align-items: start; } .curator .ph { width: 110px; } }
 </style>
