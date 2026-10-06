@@ -15,14 +15,13 @@ const { fresh } = await galleryStats();
         <h1 class="htitle">The World of Experiences, <i>Compiled</i></h1>
         <span class="hsub">{site.subtitle}</span>
       </div>
+      <figure class="curator">
+        <span class="ph"><Image src={portrait} alt={`Portrait of ${site.owner}`} width={480} quality={82} /></span>
+      </figure>
       <p class="hintro">
         {site.intro}
         {site.openToWork && <span class="open-to-work">Open to work.</span>}
       </p>
-      <figure class="curator">
-        <span class="ph"><Image src={portrait} alt={`Portrait of ${site.owner}`} width={480} quality={82} /></span>
-        <figcaption class="wl">{site.city}, {site.country}</figcaption>
-      </figure>
     </div>
     <div class="hright">
       <RouteBlock route={1} fresh={fresh} />
@@ -36,7 +35,7 @@ const { fresh } = await galleryStats();
     display: grid;
     grid-template-columns: minmax(0, .85fr) minmax(0, 1.6fr);
     gap: clamp(28px, 5vw, 80px);
-    align-items: center;
+    align-items: stretch;
     padding: clamp(18px, 3.5vh, 44px) var(--gutter);
   }
   .hleft { display: flex; flex-direction: column; gap: clamp(16px, 3.4vh, 28px); }
@@ -48,10 +47,10 @@ const { fresh } = await galleryStats();
   .hintro { font: 400 1.06rem/1.5 var(--serif); color: var(--ink2); max-width: 30ch; }
   /* "Open to work." sits on its own line under the intro */
   .hintro :global(.open-to-work) { display: block; margin-top: .35em; }
-  .curator { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; margin: 0; }
-  .curator :global(figcaption) { font-size: .78rem; line-height: 1.4; }
+  /* the photo fills the space left under the intro, ending level with the routes on the right */
+  .curator { flex: 1 1 0; min-height: 96px; max-height: 340px; display: flex; flex-direction: column; align-items: flex-start; margin: 0; }
   /* the photo at its own 3:4 shape, no zoom, with a thin mat */
-  .curator .ph { width: clamp(84px, 15vh, 180px); aspect-ratio: 3 / 4; flex: none; padding: 5px; border: 1px solid var(--hair); }
+  .curator .ph { flex: 1 1 0; min-height: 0; aspect-ratio: 3 / 4; max-width: 100%; padding: 5px; border: 1px solid var(--hair); }
   .curator :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .hright { display: flex; flex-direction: column; gap: clamp(20px, 6vh, 64px); min-width: 0; }
   .hright :global(.rblock h2) { font-size: clamp(1.7rem, min(4.4vw, 7.6vh), 4rem); }
@@ -59,5 +58,5 @@ const { fresh } = await galleryStats();
   .hright :global(.route .wl) { font-size: clamp(.74rem, 1.55vh, .9rem); line-height: 1.35; }
   .hright :global(.rblock .tagline) { font-size: clamp(1.02rem, 2vh, 1.25rem); }
   .hright :global(.route .wl b) { font-size: clamp(.88rem, 1.8vh, 1.05rem); }
-  @media (max-width: 880px) { .home { grid-template-columns: 1fr; align-items: start; } .curator .ph { width: 110px; } }
+  @media (max-width: 880px) { .home { grid-template-columns: 1fr; align-items: start; } .curator { flex: none; max-height: none; } .curator .ph { flex: none; width: 130px; } }
 </style>
