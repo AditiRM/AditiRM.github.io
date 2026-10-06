@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import RouteBlock from '../../components/RouteBlock.astro';
+import { routes } from '../../data/site';
+import { galleryStats } from '../../data/stats';
+
+const { fresh, counts } = await galleryStats();
+const r = routes[2];
+---
+<Base title={r.name} description={r.tagline}>
+  <div class="routepage">
+    <RouteBlock route={2} fresh={fresh} counts={counts} compact={false} headingLevel="h1" />
+    <p class="why">
+      <code>-O0</code> tells a compiler to optimise nothing, and <code>-g</code> keeps the debug information, so everything
+      can be traced back to where it came from. This route is the same idea: the meals, the books, the evenings and the
+      trips, with every story kept.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .routepage { padding: clamp(28px, 5vw, 64px) var(--gutter); display: flex; flex-direction: column; gap: 40px; }
+  .why { font: 400 1rem/1.6 var(--serif); color: var(--ink2); max-width: 60ch; }
+  .why code { font: 400 .9em var(--mono); color: var(--ink); }
+</style>

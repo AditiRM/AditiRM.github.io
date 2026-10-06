@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Gallery from '../../../layouts/Gallery.astro';
+import { fmtDate, isFresh, isVisible } from '../../../data/site';
+
+const posts = (await getCollection('machineMusings'))
+  .filter((e) => isVisible(e.data))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const count = `${posts.length} post${posts.length === 1 ? '' : 's'}`;
+---
+<Gallery gallery="machine-musings" count={count}>
+  <div class="gbody">
+    {posts.length === 0 ? (
+      <div class="empty">
+        <h2>The first post is on its way.</h2>
+        <p>Technical blogs on compilers, systems and the semiconductor world: LLVM backends, code generation and where software meets silicon.</p>
+      </div>
+    ) : (
+      <ol class="posts">
+        {posts.map((e) => (
+          <li>
+            <a href={`/route-1/machine-musings/${e.id}/`} class:list={{ fresh: isFresh(e.data.date) }}>
+              <span class="date">{fmtDate(e.data.date)}</span>
+              <span class="body">
+                <span class="t">{e.data.title}</span>
+                <span class="s">{e.data.summary}</span>
+              </span>
+              {e.data.draft && <span class="example">Example · local only</span>}
+            </a>
+          </li>
+        ))}
+      </ol>
+    )}
+  </div>
+</Gallery>
+
+<style>
+  .posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+  .posts a { display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; gap: 18px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--hair); }
+  .date { font: 400 .78rem/1.4 var(--mono); color: var(--ink2); font-variant-numeric: tabular-nums; }
+  .body { display: flex; flex-direction: column; gap: 4px; }
+  .t { font: 400 1.45rem/1.2 var(--serif); letter-spacing: -.01em; }
+  .s { color: var(--ink2); font-size: .95rem; }
+  .posts a:hover .t { color: var(--plum); }
+  .fresh .t::after { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-left: 9px; vertical-align: .2em; }
+  @media (max-width: 640px) { .posts a { grid-template-columns: 1fr; gap: 6px; } }
+</style>

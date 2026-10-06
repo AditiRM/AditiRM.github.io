@@ -1,0 +1,106 @@
+---
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description = `${site.owner}: compiler engineer (LLVM backends, codegen) in ${site.city}. ${site.intro}` } = Astro.props;
+const pageTitle = title ? `${title} · ${site.title}` : site.title;
+const path = Astro.url.pathname;
+const nav = [
+  { href: '/route-1/', label: 'Route 1' },
+  { href: '/route-2/', label: 'Route 2' },
+  { href: '/curator/', label: 'The Curator' },
+];
+const canonical = new URL(path, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // Apply a saved theme before the page paints, so there's no flash of the wrong colours.
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap"
+    />
+  </head>
+  <body>
+    <div class="shell">
+      <div class="sheet">
+        <header class="topbar">
+          <a class="owner" href="/">{site.owner}</a>
+          <nav aria-label="Main">
+            {nav.map((n) => (
+              <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
+            ))}
+          </nav>
+        </header>
+        <main>
+          <slot />
+        </main>
+        <footer class="contact">
+          <div class="left">
+            <span class="k">Contact me</span>
+            <div class="icons">
+              <a href={site.links.linkedin} rel="noopener" target="_blank"><Icon name="linkedin" />LinkedIn</a>
+              <a href={site.links.github} rel="noopener" target="_blank"><Icon name="github" />GitHub</a>
+              <a href={`mailto:${site.links.email}`}><Icon name="mail" />{site.links.email}</a>
+            </div>
+          </div>
+          <div class="right">
+            <span class="weekly">Catalogued weekly</span>
+            <button type="button" class="theme-toggle" aria-label="Switch theme" title="Switch theme">
+              <Icon name="moon" class="moon" />
+              <Icon name="sun" class="sun" />
+            </button>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      // Footer sun/moon toggle. Until the visitor clicks, the site follows the device setting;
+      // after that their choice is remembered in this browser.
+      const root = document.documentElement;
+      const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+      const deviceDark = matchMedia('(prefers-color-scheme: dark)');
+      const current = () => root.dataset.theme ?? (deviceDark.matches ? 'dark' : 'light');
+      const updateLabel = () => {
+        if (!button) return;
+        const text = `Switch to ${current() === 'dark' ? 'light' : 'dark'} theme`;
+        button.setAttribute('aria-label', text);
+        button.title = text;
+      };
+      button?.addEventListener('click', () => {
+        const next = current() === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem('theme', next);
+        } catch {}
+        updateLabel();
+      });
+      deviceDark.addEventListener('change', updateLabel);
+      updateLabel();
+    </script>
+  </body>
+</html>

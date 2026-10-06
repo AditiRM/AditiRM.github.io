@@ -1,0 +1,82 @@
+---
+import { getEntry, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import installation from '../assets/photos/installation.jpg';
+import scuba from '../assets/photos/scuba.jpg';
+import artIsLife from '../assets/photos/art-is-life.jpg';
+import tokyo from '../assets/photos/tokyo.jpg';
+
+const page = await getEntry('pages', 'curator');
+if (!page) throw new Error('Missing src/content/pages/curator.md');
+const { Content } = await render(page);
+
+// "Moments": photos with wall-label captions (a short title, then what the moment was made of).
+const moment = {
+  installation: { src: installation, alt: `${site.owner} sitting beneath handcrafted lanterns by Oorja at Sabha, Bengaluru`, cap: 'Beneath handcrafted lanterns by Oorja', medium: 'A quiet evening at Sabha, Bengaluru' },
+  scuba: { src: scuba, alt: `${site.owner} scuba diving above a coral reef at Kavaratti, Lakshadweep, making an OK sign beside another diver`, cap: 'Under the sea at Kavaratti', medium: 'Scuba diving in Lakshadweep' },
+  artIsLife: { src: artIsLife, alt: `${site.owner} standing behind a colourful ART IS LIFE sign at the Museum of Art and Photography`, cap: 'Art is life', medium: 'Letters, colour and a sunny afternoon at the Museum of Art and Photography (MAP)' },
+  tokyo: { src: tokyo, alt: 'Collage from Tokyo: ramen, Tokyo Tower at night, a lantern-lit alley, and Aditi in a patchwork hoodie', cap: 'Tokyo, in five frames', medium: 'Ramen, lanterns, Tokyo Tower at night' },
+};
+
+// Two rows, mirrored: tall + wide, then wide + tall. Photos in a row share one height
+// (each one's width follows its own shape), so nothing is cropped and the edges line up.
+const rows = [
+  [moment.installation, moment.scuba],
+  [moment.artIsLife, moment.tokyo],
+];
+---
+<Base title={page.data.title} description={`About ${site.owner}, curator of ${site.title}.`}>
+  <article class="curator">
+    <header class="head">
+      <span class="label">{site.subtitle}</span>
+      <h1>{page.data.title}</h1>
+    </header>
+    <div class="body prose"><Content /></div>
+  </article>
+
+  <section class="moments" aria-labelledby="moments-title">
+    <h2 class="label rule" id="moments-title">Moments</h2>
+    <div class="spread">
+      {rows.map((row) => (
+        <div class="pair">
+          {row.map((p) => (
+            <figure style={`flex:${(p.src.width / p.src.height).toFixed(3)} 1 0`}>
+              <Image src={p.src} alt={p.alt} width={900} quality={80} />
+              <figcaption class="wl"><b>{p.cap}</b><span>{p.medium}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* the text sits in a centred reading column */
+  .curator { width: min(100%, 720px); margin: 0 auto; padding: clamp(36px, 6vw, 72px) var(--gutter) 0; }
+  .head { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; margin-bottom: clamp(24px, 4vw, 40px); }
+  h1 { font: 300 clamp(2.6rem, 5.4vw, 4rem)/1 var(--serif); letter-spacing: -.03em; }
+  .body { max-width: none; }
+  /* the motto, written as a > quote in curator.md */
+  .body :global(blockquote) { font: italic 300 1.25rem/1.4 var(--serif); color: var(--ink); border-left: 3px solid var(--accent); padding-left: 16px; margin: 1.6em 0; text-wrap: balance; }
+  .body :global(blockquote p) { margin: 0; }
+
+  /* Moments: a centred spread, a little wider than the text */
+  .moments { padding: clamp(48px, 7vw, 88px) var(--gutter) clamp(48px, 6vw, 80px); }
+  .moments > * { width: min(100%, 880px); margin-inline: auto; }
+  /* "—— MOMENTS ——" */
+  .rule { display: flex; align-items: center; gap: 16px; margin-bottom: clamp(24px, 4vw, 40px); }
+  .rule::before, .rule::after { content: ''; flex: 1; border-top: 1px solid var(--hair); }
+  .spread { display: flex; flex-direction: column; gap: clamp(32px, 5vw, 56px); }
+  .pair { display: flex; gap: clamp(16px, 2.5vw, 28px); align-items: flex-start; }
+  .pair figure { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+  .pair :global(img) { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
+
+  /* on phones, one photo per line */
+  @media (max-width: 600px) {
+    .pair { flex-direction: column; gap: clamp(28px, 6vw, 40px); }
+    .pair figure { flex: 0 0 auto !important; width: 100%; }
+  }
+</style>

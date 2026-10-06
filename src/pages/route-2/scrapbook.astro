@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import Gallery from '../../layouts/Gallery.astro';
+import { isVisible } from '../../data/site';
+
+const finds = (await getCollection('scrapbook'))
+  .filter((c) => isVisible(c.data))
+  .sort((a, b) => b.id.localeCompare(a.id));
+
+const types = [
+  { type: 'quote', label: 'Quotes', one: 'Quote' },
+  { type: 'blog', label: 'Blogs', one: 'Blog' },
+  { type: 'podcast', label: 'Podcasts', one: 'Podcast' },
+  { type: 'book', label: 'Books', one: 'Book' },
+  { type: 'video', label: 'Videos', one: 'Video' },
+  { type: 'song', label: 'Songs', one: 'Song' },
+  { type: 'line', label: 'My lines', one: 'My line' },
+] as const;
+const countOf = (t: string) => finds.filter((c) => c.data.type === t).length;
+// Only types that have at least one find appear in the filter row.
+const shown = types.filter((t) => countOf(t.type) > 0);
+const singular = Object.fromEntries(types.map((t) => [t.type, t.one]));
+---
+<Gallery gallery="scrapbook" count={`${finds.length} find${finds.length === 1 ? '' : 's'}`}>
+  <div class="gbody cat">
+    {finds.length === 0 ? (
+      <div class="empty">
+        <h2>The scrapbook is empty for now.</h2>
+        <p>Quotes, blogs, podcasts, books, videos, songs and my own lines will be kept here, a few at a time.</p>
+      </div>
+    ) : (
+      <>
+        <div class="bar">
+          <div class="filters" role="group" aria-label="Show finds by type">
+            <button type="button" data-type="all" aria-pressed="true">All<sup>{finds.length}</sup></button>
+            {shown.map((t) => (
+              <button type="button" data-type={t.type} aria-pressed="false">{t.label}<sup>{countOf(t.type)}</sup></button>
+            ))}
+          </div>
+          <button type="button" class="shuffle" id="shuffle">Shuffle</button>
+        </div>
+
+        <ul class="cards" id="cards">
+          {finds.map((c) => {
+            const d = c.data;
+            return (
+              <li data-type={d.type}>
+                <article class:list={['card', d.type]}>
+                  <span class="type">{singular[d.type]}</span>
+                  <p class="tx">{d.type === 'quote' ? `“${d.text}”` : d.text}</p>
+                  {d.by && <p class="by">{d.by}</p>}
+                  {d.note && <p class="note">{d.note}</p>}
+                  {d.url && <a class="link" href={d.url} target="_blank" rel="noopener">Open ↗</a>}
+                  {d.draft && <span class="example">Example · local only</span>}
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    )}
+  </div>
+</Gallery>
+
+<style>
+  .cat { display: flex; flex-direction: column; gap: 32px; }
+  .bar { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--hair); padding-bottom: 12px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .filters button, .shuffle {
+    font: 400 .8rem/1.4 var(--mono); background: none; border: 0; padding: 2px 0; cursor: pointer;
+    color: var(--ink2); border-bottom: 1px solid transparent;
+  }
+  .filters button:hover, .shuffle:hover { color: var(--ink); }
+  .filters button[aria-pressed='true'] { color: var(--ink); border-bottom-color: var(--ink); }
+  .filters sup { font-size: .62rem; margin-left: 3px; color: var(--ink2); }
+  .shuffle:hover { color: var(--accent); }
+
+  .cards { list-style: none; margin: 0; padding: 0; columns: 3 240px; column-gap: 36px; }
+  .cards > li { break-inside: avoid; margin-bottom: 32px; }
+  .cards > li[hidden] { display: none; }
+  .card { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--ink); padding-top: 10px; transition: border-color .2s; }
+  .type { font: 500 .62rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+  .tx { font: 400 1.15rem/1.4 var(--serif); }
+  .quote .tx, .line .tx, .book .tx { font-style: italic; }
+  .by { font: 400 .76rem/1.4 var(--mono); color: var(--ink2); }
+  .note { font-size: .88rem; line-height: 1.5; color: var(--ink2); }
+  .link { font: 400 .74rem/1.4 var(--mono); color: var(--ink2); align-self: flex-start; border-bottom: 1px solid var(--hair); }
+  .link:hover { color: var(--accent); border-color: var(--accent); }
+  .card.ping { border-top-color: var(--accent); }
+  .card.ping .type { color: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .card { transition: none; } }
+</style>
+
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('.filters button')];
+  const items = [...document.querySelectorAll<HTMLLIElement>('#cards > li')];
+  const show = (type: string) => {
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === type)));
+    items.forEach((li) => { li.hidden = type !== 'all' && li.dataset.type !== type; });
+  };
+  buttons.forEach((b) => b.addEventListener('click', () => show(b.dataset.type ?? 'all')));
+  document.getElementById('shuffle')?.addEventListener('click', () => {
+    if (!items.length) return;
+    show('all');
+    const li = items[Math.floor(Math.random() * items.length)];
+    document.querySelectorAll('.card.ping').forEach((c) => c.classList.remove('ping'));
+    li.querySelector('.card')?.classList.add('ping');
+    li.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+  });
+</script>

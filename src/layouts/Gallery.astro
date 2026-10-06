@@ -1,0 +1,59 @@
+---
+// Frame for every gallery page: route strip, gallery heading, content, "next stop".
+import Base from './Base.astro';
+import RouteLine from '../components/RouteLine.astro';
+import { galleryByKey, routeGalleries, routes, wings } from '../data/site';
+
+interface Props {
+  gallery: string;
+  /** e.g. "12 works" */
+  count?: string;
+  /** override the gallery blurb under the heading */
+  lede?: string;
+  /** small page title for <title>, defaults to gallery title */
+  title?: string;
+  /** hide the heading (used by single posts, which have their own) */
+  bare?: boolean;
+}
+const { gallery, count, lede, title, bare = false } = Astro.props;
+const g = galleryByKey(gallery);
+const r = routes[g.route];
+const list = routeGalleries(g.route);
+const idx = list.findIndex((x) => x.key === g.key);
+const prev = list[idx - 1];
+const next = list[idx + 1];
+const color = wings[g.wing].color;
+---
+<Base title={title ?? g.title} description={`${g.title}: ${lede ?? g.blurb}`}>
+  <div style={`--c:${color}`}>
+    <div class="gstrip">
+      <div class="row">
+        <a href={r.href}>Route {r.n} · {r.name}</a>
+        <span>stop {idx + 1} of {list.length}</span>
+      </div>
+      <RouteLine galleries={list} here={g.key} mini />
+    </div>
+    {!bare && (
+      <div class="ghead">
+        <h1>{g.title}</h1>
+        <div class="wl">
+          <b>{wings[g.wing].name}</b>
+          <span>{lede ?? g.blurb}</span>
+          {count && <span class="g">{count}</span>}
+        </div>
+      </div>
+    )}
+    <slot />
+    <nav class="gnav" aria-label="Route navigation">
+      {prev ? <a href={prev.href}>← {prev.title}</a> : <a href="/">← Back to the start</a>}
+      {next ? (
+        <a href={next.href}>
+          <b>Next stop →</b> {next.title}
+          {next.wing !== g.wing && <span class="change" style={`--c:${wings[next.wing].color}`}> (change to the {wings[next.wing].name})</span>}
+        </a>
+      ) : (
+        <a href={g.route === 1 ? '/route-2/' : '/route-1/'}><b>End of the line →</b> take Route {g.route === 1 ? 2 : 1}</a>
+      )}
+    </nav>
+  </div>
+</Base>

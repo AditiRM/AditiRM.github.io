@@ -1,0 +1,26 @@
+---
+import RouteLine from './RouteLine.astro';
+import { routes, routeGalleries, wings } from '../data/site';
+
+interface Props {
+  route: 1 | 2;
+  fresh?: string[];
+  compact?: boolean;
+  counts?: Record<string, string>;
+  headingLevel?: 'h1' | 'h2';
+}
+const { route, fresh = [], compact = true, counts = {}, headingLevel = 'h2' } = Astro.props;
+const r = routes[route];
+const list = routeGalleries(route);
+const wingKeys = [...new Set(list.map((g) => g.wing))];
+const H = headingLevel;
+---
+<section class="rblock" aria-labelledby={`route-${route}`}>
+  <span class="rno"><span>Route {r.n}</span><span>{r.flag} · {r.pace}</span></span>
+  <H class="ww" id={`route-${route}`}><a href={r.href}>{r.name}</a></H>
+  <p class="tagline">{r.tagline}</p>
+  <div class="wings">
+    {wingKeys.map((w) => <span><i style={`background:${wings[w].color}`}></i>{wings[w].name}</span>)}
+  </div>
+  <RouteLine galleries={list} fresh={fresh} compact={compact} counts={counts} />
+</section>

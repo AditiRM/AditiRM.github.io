@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import Gallery from '../../../layouts/Gallery.astro';
+import { fmtDate, isVisible } from '../../../data/site';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('machineMusings')).filter((e) => isVisible(e.data));
+  return posts.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<Gallery gallery="machine-musings" title={d.title} lede={d.summary} bare>
+  <article class="item paper-graph">
+    <aside class="side">
+      <div class="wl">
+        <b>{d.title}</b>
+        {d.medium && <span>{d.medium}</span>}
+        <span class="g">Machine Musings · {fmtDate(d.date)} · Work Wing</span>
+      </div>
+      <span class="stage" style="color:var(--plum);border-color:var(--plum)">
+        {d.stage === 'seedling' ? '🌱 seedling' : d.stage === 'growing' ? '🌿 growing' : '🌳 evergreen'}
+      </span>
+      {d.draft && <span class="example">Example · local only</span>}
+    </aside>
+    <div class="prose">
+      <h1>{d.title}</h1>
+      <Content />
+    </div>
+  </article>
+</Gallery>

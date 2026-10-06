@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import Gallery from '../../../layouts/Gallery.astro';
+import { fmtDate, isFresh, isVisible } from '../../../data/site';
+
+const entries = (await getCollection('dearDiary'))
+  .filter((e) => isVisible(e.data))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const count = `${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}`;
+const stageIcon = { seedling: '🌱', growing: '🌿', evergreen: '🌳' } as const;
+// Frames vary in size so the wall feels hung by hand, but the pattern is fixed so it never jumps around.
+const sizes = [[190, 220], [220, 170], [180, 190], [210, 200], [175, 165]];
+---
+<Gallery gallery="dear-diary" count={count}>
+  <div class="gbody">
+    {entries.length === 0 ? (
+      <div class="empty">
+        <h2>The first entry is being written.</h2>
+        <p>Every Sunday a new entry goes up here: a language, something about the brain or behaviour, what I read and a reflection.</p>
+      </div>
+    ) : (
+      <div class="wall">
+        {entries.map((e, i) => {
+          const [w, h] = sizes[i % sizes.length];
+          return (
+            <a class:list={['work', { fresh: isFresh(e.data.date) }]} href={`/route-2/dear-diary/${e.id}/`}>
+              <span class="art" style={`width:${w}px;height:${h}px`}>
+                {e.data.kind === 'weekly' && e.data.week ? (
+                  <>
+                    <span class="big">{e.data.week}</span>
+                    <span class="cap">Week</span>
+                  </>
+                ) : (
+                  <span class="ital">{e.data.title}</span>
+                )}
+              </span>
+              <span class="wl">
+                <b>{e.data.title}</b>
+                {e.data.medium && <span>{e.data.medium}</span>}
+                <span class="g">{fmtDate(e.data.date)} · {stageIcon[e.data.stage]} {e.data.stage}</span>
+                {e.data.draft && <span class="example">Example · local only</span>}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</Gallery>
+
+<style>
+  .wl { max-width: 26ch; }
+</style>

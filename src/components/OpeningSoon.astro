@@ -1,0 +1,24 @@
+---
+import Gallery from '../layouts/Gallery.astro';
+import { galleryByKey } from '../data/site';
+
+interface Props { gallery: string; promise: string }
+const { gallery, promise } = Astro.props;
+const g = galleryByKey(gallery);
+---
+<Gallery gallery={gallery}>
+  <div class="gbody">
+    <div class="wall soon">
+      <div class="work">
+        <span class="art" style="width:220px;height:180px">
+          <span class="ital">Opening soon</span>
+        </span>
+        <span class="wl"><b>{g.title}</b><span>{promise}</span></span>
+      </div>
+    </div>
+  </div>
+</Gallery>
+
+<style>
+  .soon .art { border-style: dashed; border-width: 2px; box-shadow: none; }
+</style>
