@@ -150,7 +150,8 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 .route .stop { display: flex; flex-direction: column; gap: 10px; padding-right: 12px; position: relative; }
 .route > li::before { content: ''; position: absolute; left: 0; right: 0; top: 4px; height: 5px; background: var(--c); }
 .route > li:first-child::before { left: 5px; border-radius: 3px 0 0 3px; }
-.route > li:last-child::before { right: auto; width: 12px; border-radius: 0 3px 3px 0; }
+/* the last segment runs to the right edge, so every route ends flush with the column */
+.route > li:last-child::before { border-radius: 0 3px 3px 0; }
 .route .dot { width: 13px; height: 13px; border-radius: 50%; background: var(--page); border: 2.5px solid var(--ink); position: relative; z-index: 1; transition: transform .2s; }
 .route a.stop:hover .dot, .route a.stop:focus-visible .dot { transform: scale(1.35); border-color: var(--c); }
 .route a.stop:focus { outline: none; }
@@ -169,13 +170,13 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
   .route .stop { flex-direction: row; gap: 14px; padding: 0 0 18px; }
   .route > li::before { left: 4px; right: auto; top: 6px; bottom: 0; width: 5px; height: auto; }
   .route > li:first-child::before { left: 4px; border-radius: 3px 3px 0 0; }
-  .route > li:last-child::before { width: 5px; height: 10px; border-radius: 0 0 3px 3px; }
+  .route > li:last-child::before { right: auto; width: 5px; height: 10px; border-radius: 0 0 3px 3px; }
   .route.mini { flex-direction: row; overflow-x: auto; }
   .route.mini .stop { flex-direction: column; padding: 0 12px 0 0; }
   .route.mini > li { flex: 0 0 auto; min-width: 84px; }
   .route.mini > li::before { left: 0; right: 0; top: 4px; bottom: auto; width: auto; height: 5px; }
   .route.mini > li:first-child::before { left: 5px; }
-  .route.mini > li:last-child::before { width: 12px; height: 5px; }
+  .route.mini > li:last-child::before { width: auto; height: 5px; border-radius: 0 3px 3px 0; }
 }
 
 /* route block (homepage + route pages) */
