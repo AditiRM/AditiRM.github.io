@@ -17,7 +17,7 @@ const { fresh } = await galleryStats();
       </div>
       <p class="hintro">
         {site.intro}
-        {site.openToWork && <span class="open-to-work"> Open to work.</span>}
+        {site.openToWork && <span class="open-to-work">Open to work.</span>}
       </p>
       <figure class="curator">
         <span class="ph"><Image src={portrait} alt={`Portrait of ${site.owner}`} width={480} quality={82} /></span>
@@ -44,10 +44,12 @@ const { fresh } = await galleryStats();
   }
   .hleft { display: flex; flex-direction: column; gap: 28px; }
   .titles { display: flex; flex-direction: column; gap: 14px; }
-  .htitle { font: 300 clamp(2.5rem, 5.4vw, 4.3rem)/.98 var(--serif); letter-spacing: -.03em; }
+  .htitle { font: 300 clamp(2.3rem, 4.8vw, 4rem)/.98 var(--serif); letter-spacing: -.03em; }
   .htitle i { font-weight: 300; }
   .hsub { font: 500 .74rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
   .hintro { font: 400 1.06rem/1.5 var(--serif); color: var(--ink2); max-width: 30ch; }
+  /* "Open to work." sits on its own line under the intro */
+  .hintro :global(.open-to-work) { display: block; margin-top: .35em; }
   .curator { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; margin: 0; }
   /* the photo at its own 3:4 shape, no zoom, with a thin mat */
   .curator .ph { width: 150px; aspect-ratio: 3 / 4; flex: none; padding: 5px; border: 1px solid var(--hair); }

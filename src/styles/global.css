@@ -4,7 +4,6 @@
    and "open to work". Gallery-wall greys. Dark mode follows the OS.
 ------------------------------------------------------------------- */
 :root {
-  --bg: #efeeea;
   --page: #f8f7f4;
   --wall: #f3f1ec;
   --ink: #161514;
@@ -25,8 +24,10 @@
   --ww-rest: 70;
   --ww-hover: 118;
 
-  --gutter: clamp(18px, 3.5vw, 44px);
-  --max: 1200px;
+  --pad: clamp(18px, 3.5vw, 44px);
+  /* page edge: the small pad on phones; on wide screens it grows so content stays in a column of --max */
+  --gutter: max(var(--pad), calc((100% - var(--max)) / 2));
+  --max: 1320px;
   color-scheme: light;
 }
 /* Dark palette: follows the device setting until the visitor picks a theme with the
@@ -34,7 +35,6 @@
    toggle can override the device in either direction. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0f0f0e;
     --page: #171716;
     --wall: #1b1b19;
     --ink: #eeede8;
@@ -51,7 +51,6 @@
   }
 }
 :root[data-theme='dark'] {
-  --bg: #0f0f0e;
   --page: #171716;
   --wall: #1b1b19;
   --ink: #eeede8;
@@ -71,7 +70,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--page);
   color: var(--ink);
   font: 16px/1.6 var(--grot);
   text-rendering: optimizeLegibility;
@@ -84,10 +83,9 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* ---------- page shell ---------- */
-.shell { max-width: var(--max); margin: 0 auto; padding: 0 16px; }
-.sheet { background: var(--page); border-inline: 1px solid var(--hair); min-height: 100vh; display: flex; flex-direction: column; }
+.shell { width: 100%; }
+.sheet { background: var(--page); min-height: 100vh; display: flex; flex-direction: column; }
 .sheet > main { flex: 1; }
-@media (max-width: 640px) { .shell { padding: 0; } .sheet { border-inline: 0; } }
 
 .topbar {
   display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap;
@@ -181,7 +179,7 @@ h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 
 /* route block (homepage + route pages) */
 .rblock .rno { font: 500 .66rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink2); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.rblock h2 { margin: 6px 0 0; font-size: clamp(2.1rem, 4.4vw, 3.4rem); }
+.rblock h2 { margin: 6px 0 0; font-size: clamp(2.1rem, 4.4vw, 4rem); }
 .rblock:hover .ww, .rblock:focus-within .ww { font-variation-settings: 'wdth' var(--ww-hover); }
 .rblock .tagline { font: italic 300 1.02rem/1.4 var(--serif); color: var(--ink2); margin-top: 6px; }
 .rblock .wings { display: flex; gap: 16px; font: 500 .64rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; margin: 12px 0 16px; color: var(--ink2); flex-wrap: wrap; }
