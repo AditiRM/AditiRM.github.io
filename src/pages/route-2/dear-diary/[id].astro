@@ -1,0 +1,34 @@
+---
+import { getCollection, render } from 'astro:content';
+import Gallery from '../../../layouts/Gallery.astro';
+import { fmtDate, isVisible } from '../../../data/site';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('dearDiary')).filter((e) => isVisible(e.data));
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+const stage = { seedling: '🌱 seedling', growing: '🌿 growing', evergreen: '🌳 evergreen' }[d.stage];
+---
+<Gallery gallery="dear-diary" title={d.title} lede={d.medium} bare>
+  <article class="item">
+    <aside class="side">
+      <div class="wl">
+        <b>{d.title}</b>
+        {d.medium && <span>{d.medium}</span>}
+        <span class="g">
+          Dear Diary{d.week ? ` · Week ${d.week}` : ''} · {fmtDate(d.date)} · Life Wing
+        </span>
+      </div>
+      <span class="stage">{stage}</span>
+      {d.draft && <span class="example">Example · local only</span>}
+    </aside>
+    <div>
+      <h1 class="ptitle">{d.week ? `Week ${d.week} · ` : ''}{d.title}</h1>
+      <div class="prose notebook"><Content /></div>
+    </div>
+  </article>
+</Gallery>

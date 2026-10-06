@@ -1,0 +1,96 @@
+# PR Exhibits
+# One entry per upstream pull request. Newest first.
+# id: the PR number. status: merged | open | closed. note: optional one-line explanation.
+
+- id: "208153"
+  title: Fix assertion failure in getASTRecordLayout for invalid declarations
+  url: https://github.com/llvm/llvm-project/pull/208153
+  area: Clang
+  status: open
+  opened: 2026-07-08
+
+- id: "208151"
+  title: Pre-commit test for assertion failure in template specialization error recovery
+  url: https://github.com/llvm/llvm-project/pull/208151
+  area: Clang
+  status: open
+  opened: 2026-07-08
+
+- id: "201022"
+  title: Prefer VSX scalar compares over FPU compares for f64
+  url: https://github.com/llvm/llvm-project/pull/201022
+  area: PowerPC
+  status: open
+  opened: 2026-06-02
+
+- id: "178121"
+  title: Align bcdsetsign Sema validation with other BCD builtins
+  url: https://github.com/llvm/llvm-project/pull/178121
+  area: PowerPC
+  status: merged
+  opened: 2026-01-27
+  merged: 2026-02-12
+
+- id: "159255"
+  title: Add custom lowering for SADD overflow for i32 and i64
+  url: https://github.com/llvm/llvm-project/pull/159255
+  area: PowerPC
+  status: merged
+  opened: 2025-09-17
+  merged: 2025-11-19
+
+- id: "154715"
+  title: Add support for BCDSHIFT, BCDSHIFTR, BCDTRUNC, BCDUTRUNC, and BCDUSHIFT instructions
+  url: https://github.com/llvm/llvm-project/pull/154715
+  area: PowerPC
+  status: merged
+  opened: 2025-08-21
+  merged: 2026-01-21
+
+- id: "144874"
+  title: Add BCDCOPYSIGN and BCDSETSIGN instruction support
+  url: https://github.com/llvm/llvm-project/pull/144874
+  area: PowerPC
+  status: merged
+  opened: 2025-06-19
+  merged: 2025-08-19
+
+- id: "108496"
+  title: Handle subregisters properly in generic operand legalizer
+  url: https://github.com/llvm/llvm-project/pull/108496
+  area: AMDGPU
+  status: merged
+  opened: 2024-09-13
+  merged: 2024-09-18
+
+- id: "108389"
+  title: Precommit and modify phi_moveimm_subreg_input testcase
+  url: https://github.com/llvm/llvm-project/pull/108389
+  area: AMDGPU
+  status: merged
+  opened: 2024-09-12
+  merged: 2024-09-12
+
+- id: "108372"
+  title: Autogenerate checks for phi-vgpr-input-moveimm.mir
+  url: https://github.com/llvm/llvm-project/pull/108372
+  area: AMDGPU
+  status: merged
+  opened: 2024-09-12
+  merged: 2024-09-12
+
+- id: "106960"
+  title: Create directory for AMDGPU-specific MachineVerifier tests
+  url: https://github.com/llvm/llvm-project/pull/106960
+  area: AMDGPU
+  status: merged
+  opened: 2024-09-02
+  merged: 2024-09-03
+
+- id: "105494"
+  title: Add MachineVerifier check to detect illegal copies from vector register to SGPR
+  url: https://github.com/llvm/llvm-project/pull/105494
+  area: AMDGPU
+  status: merged
+  opened: 2024-08-21
+  merged: 2024-09-19

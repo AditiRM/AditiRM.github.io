@@ -1,0 +1,39 @@
+---
+// A route drawn as a metro line: each gallery is a stop with a wall label.
+import { wings, type Gallery } from '../data/site';
+
+interface Props {
+  galleries: Gallery[];
+  /** gallery keys with something new this week */
+  fresh?: string[];
+  /** the gallery you're standing in */
+  here?: string;
+  /** hide counts (homepage) */
+  compact?: boolean;
+  /** tiny version for page headers */
+  mini?: boolean;
+  /** counts per gallery key, shown in full labels */
+  counts?: Record<string, string>;
+}
+const { galleries, fresh = [], here, compact = false, mini = false, counts = {} } = Astro.props;
+---
+<ol class:list={['route', { mini }]}>
+  {galleries.map((g, i) => {
+    const xfer = i > 0 && galleries[i - 1].wing !== g.wing;
+    const cls = ['stop', { fresh: fresh.includes(g.key), here: here === g.key, xfer, closed: !g.open }];
+    return (
+      <li style={`--c:${wings[g.wing].color}`}>
+        <a class:list={cls} href={g.href} aria-current={here === g.key ? 'page' : undefined}>
+          <span class="dot" aria-hidden="true"></span>
+          <span class="wl">
+            <b>{g.title}</b>
+            {!mini && <span>{g.blurb}</span>}
+            {!g.open && !mini && <span class="soon">Opening soon</span>}
+            {!compact && !mini && g.open && counts[g.key] && <span class="g">{counts[g.key]}</span>}
+            {fresh.includes(g.key) && <span class="sr-only">(new this week)</span>}
+          </span>
+        </a>
+      </li>
+    );
+  })}
+</ol>

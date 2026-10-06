@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import RouteBlock from '../../components/RouteBlock.astro';
+import { routes } from '../../data/site';
+import { galleryStats } from '../../data/stats';
+
+const { fresh, counts } = await galleryStats();
+const r = routes[1];
+---
+<Base title={r.name} description={r.tagline}>
+  <div class="routepage">
+    <RouteBlock route={1} fresh={fresh} counts={counts} compact={false} headingLevel="h1" />
+    <p class="why">
+      <code>{r.flag}</code> is a compiler's highest common optimisation level: everything unnecessary is stripped out so the
+      program runs fast. This route is the same idea: three stops, about five minutes.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .routepage { padding: clamp(28px, 5vw, 64px) var(--gutter); display: flex; flex-direction: column; gap: 40px; }
+  .why { font: 400 1rem/1.6 var(--serif); color: var(--ink2); max-width: 60ch; }
+  .why code { font: 400 .9em var(--mono); color: var(--ink); }
+</style>

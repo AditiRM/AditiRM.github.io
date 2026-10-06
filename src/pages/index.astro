@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import RouteBlock from '../components/RouteBlock.astro';
+import { site } from '../data/site';
+import { galleryStats } from '../data/stats';
+import portrait from '../assets/photos/street-dusk.jpg';
+
+const { fresh } = await galleryStats();
+---
+<Base>
+  <div class="home">
+    <div class="hleft">
+      <div class="titles">
+        <h1 class="htitle">The World of Experiences, <i>Compiled</i></h1>
+        <span class="hsub">{site.subtitle}</span>
+      </div>
+      <p class="hintro">
+        {site.intro}
+        {site.openToWork && <span class="open-to-work"> Open to work.</span>}
+      </p>
+      <figure class="curator">
+        <span class="ph"><Image src={portrait} alt={`Portrait of ${site.owner}`} width={480} quality={82} /></span>
+        <figcaption class="wl">
+          <b>{site.owner}</b>
+          <span>Curator · compiler engineer</span>
+          <span class="g">{site.city}</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="hright">
+      <RouteBlock route={1} fresh={fresh} />
+      <RouteBlock route={2} fresh={fresh} />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.6fr);
+    gap: clamp(28px, 5vw, 80px);
+    padding: clamp(28px, 5vw, 64px) var(--gutter);
+  }
+  .hleft { display: flex; flex-direction: column; gap: 28px; }
+  .titles { display: flex; flex-direction: column; gap: 14px; }
+  .htitle { font: 300 clamp(2.5rem, 5.4vw, 4.3rem)/.98 var(--serif); letter-spacing: -.03em; }
+  .htitle i { font-weight: 300; }
+  .hsub { font: 500 .74rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
+  .hintro { font: 400 1.06rem/1.5 var(--serif); color: var(--ink2); max-width: 30ch; }
+  .curator { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; margin: 0; }
+  /* the photo at its own 3:4 shape, no zoom, with a thin mat */
+  .curator .ph { width: 150px; aspect-ratio: 3 / 4; flex: none; padding: 5px; border: 1px solid var(--hair); }
+  .curator :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .hright { display: flex; flex-direction: column; gap: 52px; min-width: 0; }
+  @media (max-width: 880px) { .home { grid-template-columns: 1fr; } }
+</style>

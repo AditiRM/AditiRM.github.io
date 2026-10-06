@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import RouteBlock from '../components/RouteBlock.astro';
+---
+<Base title="Not found">
+  <div class="lost">
+    <div class="msg">
+      <span class="label">404</span>
+      <h1>This page doesn't exist.</h1>
+      <p>Maybe it moved, or it hasn't opened yet. Here are both routes back into the cabinet.</p>
+    </div>
+    <RouteBlock route={1} />
+    <RouteBlock route={2} />
+  </div>
+</Base>
+
+<style>
+  .lost { padding: clamp(28px, 5vw, 64px) var(--gutter); display: flex; flex-direction: column; gap: 48px; }
+  .msg { display: flex; flex-direction: column; gap: 12px; }
+  h1 { font: 300 clamp(2.2rem, 5vw, 3.6rem)/1 var(--serif); letter-spacing: -.03em; }
+  .msg p { font: 400 1.05rem/1.5 var(--serif); color: var(--ink2); max-width: 46ch; }
+</style>

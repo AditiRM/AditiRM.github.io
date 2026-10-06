@@ -1,0 +1,53 @@
+# Scrapbook, October 2026
+# Add a find by appending three or four lines. Types:
+#   quote · blog · podcast · book · video · song · line (your own line)
+# Optional: by, url, note, tags, date. Delete "draft: true" to publish a find.
+# These examples are drafts: they show locally, never on the live site.
+
+- type: quote
+  text: The map is not the territory.
+  by: Alfred Korzybski
+  tags: [mind]
+  draft: true
+
+- type: quote
+  text: We suffer more often in imagination than in reality.
+  by: Seneca
+  tags: [stoicism]
+  draft: true
+
+- type: blog
+  text: Eli Bendersky's blog
+  url: https://eli.thegreenplace.net
+  note: Patient explanations of LLVM and Python internals.
+  tags: [compilers]
+  draft: true
+
+- type: podcast
+  text: Stuff You Should Know
+  by: Josh Clark & Chuck Bryant
+  note: An example podcast find. Add the episode, and the one idea you kept from it.
+  tags: [curiosity]
+  draft: true
+
+- type: podcast
+  text: Finshots Daily
+  note: Another example. Five-minute explainers worth retelling at dinner.
+  tags: [finance]
+  draft: true
+
+- type: book
+  text: Behave
+  by: Robert Sapolsky
+  note: Chapter notes go into the weekly Dear Diary.
+  tags: [behaviour, brain]
+  draft: true
+
+- type: song
+  text: Lag Jaa Gale
+  by: Lata Mangeshkar
+  draft: true
+
+- type: line
+  text: Abstractions are only kind when they're explainable.
+  draft: true
